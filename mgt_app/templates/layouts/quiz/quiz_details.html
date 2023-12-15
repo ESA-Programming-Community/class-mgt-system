@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title%}
+
+
+    {% block content %}
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        {% include 'inc/sideNav.html' %}
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          {% include 'inc/navbar.html' %}
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y pt-0">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style2 mt-3 mb-4">
+                    <li class="breadcrumb-item">
+                        <a href="#">ESA</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'home' %}">Communities</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">{{ community_name }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Quiz</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">{{ name }}</a>
+                    </li>
+                </ol>
+            </nav>
+              <div class="row">
+              <div class="mb-2">
+                <h5 style="font-style: italic; text-decoration: underline" class="mb-3">Instruction: Choose the correct answer for each question</h5>
+              </div>
+              <form action="" method="post">
+                  {% csrf_token %}
+                {% for question in questions %}
+                    <p style="font-size: 16px"><span style="font-weight: bold">Q{{ question.question_number }}:</span> <pre>{{ question.question_text|linebreaksbr}}</pre></p>
+                  <ol>
+                    {% for answer in answers %}
+                        {% if answer.question == question %}
+                            <li style="list-style: none">
+                                <input required name="q{{ question.question_number }}" type="radio" value="{{ answer.answer_text }}"></input>
+                                <label for="">{{ answer }}</label>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                  </ol>
+                {% endfor %}
+              <button type="submit" class="btn btn-success mt-4">Submit Answers</button>
+              </form>
+            </div>
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+                {% include 'inc/footer.html' %}
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    </div>
+   {% endblock content %}
+
+
+    {% block scripts %}
+        <script>
+            let addCard = $(".add-card")
+            let form = $("#myForm")
+            let addButton = $(".add-button")
+
+            addCard.click(function() {
+                addButton.prop('disabled', false)
+                addCard.css('display', 'none')
+                form.removeClass("d-none")
+                form.addClass("d-block")
+                $('html, body').animate({
+                    scrollTop: $("#myForm").offset().top
+                }, 500)
+            })
+
+            function closeForm(){
+                addCard.css('display', 'block')
+                form.removeClass("d-block")
+                form.addClass("d-none")
+                addButton.prop('disabled', true)
+            }
+        </script>
+    {% endblock scripts %}

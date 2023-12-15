@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title%}
+
+
+    {% block content %}
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        {% include 'inc/sideNav.html' %}
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          {% include 'inc/navbar.html' %}
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y pt-0">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style2 mt-3 mb-4">
+                    <li class="breadcrumb-item">
+                        <a href="#">ESA</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'home' %}">Communities</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">{{ community_name }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Quiz</a>
+                    </li>
+                </ol>
+            </nav>
+              <div class="row">
+              <h4 class="mt-3">Add Quiz</h4>
+                <div class="col-12 mb-4 order-0">
+                  <div class="card p-4">
+                      <form action="" method="post">
+                          {% csrf_token %}
+                          <div class="row">
+                             <div class="col-lg-6 mb-4">
+                                 <label for="">Quiz Number</label>
+                            {{ form.quiz_number }}
+                          </div>
+                          <div class="col-lg-6 mb-4">
+                              <label for="">Quiz Title</label>
+                            {{ form.quiz_title }}
+                          </div>
+                          </div>
+                          <div class="col-12 mb-4">
+                              <label for="">Quiz Description</label>
+                            {{ form.quiz_description}}
+                          </div>
+
+                          <button type="submit" class="btn btn-outline-success">Add Quiz</button>
+                      </form>
+                  </div>
+                </div>
+            </div>
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+                {% include 'inc/footer.html' %}
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    </div>
+   {% endblock content %}
+
+
+    {% block scripts %}
+    {% endblock scripts %}

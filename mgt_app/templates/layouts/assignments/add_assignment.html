@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title%}
+
+
+    {% block content %}
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        {% include 'inc/sideNav.html' %}
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          {% include 'inc/navbar.html' %}
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y pt-0">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style2 mt-3 mb-4">
+                    <li class="breadcrumb-item">
+                        <a href="#">ESA</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'home' %}">Communities</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">{{ community_name }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Assignment</a>
+                    </li>
+                </ol>
+            </nav>
+              <div class="row">
+              {% if action == 'adding' %}
+              <h4 class="mt-3">Add Assignment</h4>
+              {% else %}
+              <h4 class="mt-3">Edit Question to Quiz ({{ quiz_title }})</h4>
+              {% endif %}
+                <div class="col-12 mb-4 order-0">
+                  <div class="card p-4">
+                      <form action="" method="post">
+                          {% csrf_token %}
+                          <div class="row">
+                              <div class="col-lg-6 mb-4">
+                                 <label for="">Assignment Number</label>
+                                {{ form.assignment_number }}
+                          </div>
+                             <div class="col-lg-6 mb-4">
+                                 <label for="">Assignment Title</label>
+                                {{ form.title }}
+                          </div>
+                          </div>
+                          <div class="col-lg-12 mb-4">
+                              <label for="">Assignment Instructions</label>
+                                {{ form.instruction }}
+                          </div>
+                          <div class="row">
+                              <div class="col-lg-6 mb-4">
+                              <label for="">Reference (Module)</label>
+                                {{ form.module_referenced }}
+                          </div>
+                              <div class="col-lg-6 mb-4">
+                              <label for="">Deadline</label>
+                                {{ form.deadline }}
+                          </div>
+                          </div>
+                          {% if action == 'adding' %}
+                            <button type="submit" class="btn btn-outline-success">Add Assignment</button>
+                          {% else %}
+                            <button type="submit" class="btn btn-outline-success">Edit Question</button>
+                          {% endif %}
+                      </form>
+                  </div>
+                </div>
+            </div>
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+                {% include 'inc/footer.html' %}
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    </div>
+   {% endblock content %}
+
+
+    {% block scripts %}
+{#        <script>#}
+{#            $(function () {#}
+{#    $('#deadline').datetimepicker({#}
+{#        format: 'YYYY-MM-DD HH:mm:ss' ,#}
+{#        // Adjust the format as needed#}
+{#    });#}
+{#});#}
+{#        </script>#}
+    {% endblock scripts %}

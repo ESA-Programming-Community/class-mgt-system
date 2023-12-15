@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title%}
+
+
+    {% block content %}
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        {% include 'inc/sideNav.html' %}
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          {% include 'inc/navbar.html' %}
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y pt-0">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style2 mt-3 mb-4">
+                    <li class="breadcrumb-item">
+                        <a href="#">ESA</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'home' %}">Communities</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">{{ community_name }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Quiz</a>
+                    </li>
+                </ol>
+            </nav>
+              <div class="row">
+              <h4 class="mt-3">Quiz Summary</h4>
+                <div class="col-12 mb-4 order-0">
+                  <div class="card">
+                    <div class="d-flex align-items-end row">
+                      <div class="col-sm-10">
+                        <div class="card-body">
+                          <h6 class="card-title text-primary">Summary of Previous Attempt ({{ quiz.title }})</h6>
+                            <p class="mb-4">
+                            <span class="fw-bold">Time Limit</span>: None
+                          </p>
+
+                            <table class="table mb-3">
+                                <thead>
+                                    <tr>
+                                        <th>State</th>
+                                        <th>Grade / {{ quiz_mark.total_score_for_quiz }}</th>
+                                        <th>Review</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Finished, Submitted {{ quiz_mark.date_completed }}</td>
+                                        <td>{{ quiz_mark.final_score }}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h5>Your final grade for this quiz is {{ quiz_mark.final_score }}/{{ quiz_mark.total_score_for_quiz }}</h5>
+                            <p>No more attempts allowed</p>
+
+                            <a class="btn btn-dark" href="{% url 'quiz_page' community_name=community_name %}">Back to Quizzes</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+                {% include 'inc/footer.html' %}
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    </div>
+   {% endblock content %}
+
+
+    {% block scripts %}
+    {% endblock scripts %}

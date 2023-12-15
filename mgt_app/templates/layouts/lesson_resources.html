@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title%}
+
+
+    {% block content %}
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        {% include 'inc/sideNav.html' %}
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          {% include 'inc/navbar.html' %}
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y pt-0">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style2 mt-3 mb-4">
+                    <li class="breadcrumb-item">
+                        <a href="#">ESA</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'home' %}">Communities</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">{{ community_name }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Modules</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">{{ module_name }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">{{ lesson_name }}</a>
+                    </li>
+                </ol>
+            </nav>
+            {% if community.instructor == request.user %}
+            <div class="button-div text-left mb-3">
+                <button class="btn btn-success add-card">Add Resource</button>
+            </div>
+            {% endif %}
+                <div class="card p-3 mb-5">
+                <h5 class="card-header px-0 pt-2 pb-4">{{ lesson_name }} Resources</h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table" id="dataTable">
+                    <thead>
+                      <tr>
+                        <th>Resource</th>
+                        <th>Description</th>
+                        <th>Link</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                    {% for resource in resources %}
+                      <tr>
+                        <td>{{ resource.title }}</td>
+                        <td>{{ resource.description }}</td>
+                        <td><a href="{% url 'player' community_name=community_name pk=resource.id %}"><i class="fa fa-link"></i> Resource Link</a></td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="form-popup mb-4 d-none" id="myForm">
+                  <hr>
+                  <form method="post" class="form-container">
+                      {% csrf_token %}
+                    <h5>Add Resource Form</h5>
+                    <div class="row">
+                        <div class="mb-2 col-lg-6">
+                        <label for="lesson-number" class="form-label">Resource Title</label>
+                        <input
+                          type="text"
+                          id="title"
+                          class="form-control"
+                          name="title"
+                          placeholder="Resource Title/Name"
+                          aria-describedby="title"
+                          required
+                        />
+                    </div>
+                    <div class="mb-2 col-lg-6">
+                        <label for="title" class="form-label">Resource Link</label>
+                        <input
+                          type="url"
+                          id="link"
+                          class="form-control"
+                          name="link"
+                          placeholder="e.g. https://www.google.com"
+                          aria-describedby="link"
+                          required
+                        />
+                    </div>
+                        <div class="mb-2 col-lg-6">
+                        <textarea
+                          type="text"
+                          id="desc"
+                          class="form-control"
+                          name="desc"
+                          placeholder="Lesson Description"
+                          aria-describedby="desc"
+                          required
+                        ></textarea>
+                    </div>
+                        </div>
+                    <button type="submit" class="btn btn-success add-button">Add Lesson</button>
+                      <button type="button" onclick="closeForm()" class="btn btn-danger">Close</button>
+                  </form>
+                  <hr>
+            </div>
+            </div>
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+                {% include 'inc/footer.html' %}
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    </div>
+   {% endblock content %}
+
+
+    {% block scripts %}
+        <script>
+            let addCard = $(".add-card")
+            let form = $("#myForm")
+            let addButton = $(".add-button")
+
+            addCard.click(function() {
+                addButton.prop('disabled', false)
+                addCard.css('display', 'none')
+                form.removeClass("d-none")
+                form.addClass("d-block")
+                $('html, body').animate({
+                    scrollTop: $("#myForm").offset().top
+                }, 500)
+            })
+
+            function closeForm(){
+                addCard.css('display', 'block')
+                form.removeClass("d-block")
+                form.addClass("d-none")
+                addButton.prop('disabled', true)
+            }
+        </script>
+    {% endblock scripts %}

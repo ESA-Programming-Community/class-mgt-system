@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title%}
+
+
+    {% block content %}
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        {% include 'inc/sideNav.html' %}
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          {% include 'inc/navbar.html' %}
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y pt-0">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style2 mt-3 mb-4">
+                    <li class="breadcrumb-item">
+                        <a href="#">ESA</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'home' %}">Communities</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">{{ community_name }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Quiz</a>
+                    </li>
+                </ol>
+            </nav>
+              <div class="row">
+              {% if action == 'adding' %}
+              <h4 class="mt-3">Add Question to Quiz ({{ quiz_title }})</h4>
+              {% else %}
+              <h4 class="mt-3">Edit Question to Quiz ({{ quiz_title }})</h4>
+              {% endif %}
+                <div class="col-12 mb-4 order-0">
+                  <div class="card p-4">
+                      <form action="" method="post">
+                          {% csrf_token %}
+                          <div class="row">
+                             <div class="col-lg-6 mb-4">
+                                 <label for="">Question Number</label>
+                            {{ question_form.question_number }}
+                          </div>
+                          <div class="col-lg-6 mb-4">
+                              <label for="">Question Text</label>
+                            {{ question_form.question_text }}
+                          </div>
+                          </div>
+                      {{ answer_form_set.management_form }}
+                          {% for form in answer_form_set %}
+                              <div class="row">
+                              {{ form.id }}
+                          <div class="col-10 mb-4">
+{#                              <label for="">Answer Text</label>#}
+                                {{ form.answer_text}}
+                          </div>
+                              <div class="col-2 mb-4">
+{#                              <label for="">Is Correct?</label>#}
+                                {{ form.is_correct}}
+                          </div>
+                              </div>
+                          {% endfor %}
+                           <p class="fst-italic">NB: If an option is the correct answer check the box associated with the correct answer option</p>
+                          {% if action == 'adding' %}
+                            <button type="submit" class="btn btn-outline-success">Add Question</button>
+                          {% else %}
+                            <button type="submit" class="btn btn-outline-success">Edit Question</button>
+                          {% endif %}
+                      </form>
+                  </div>
+                </div>
+            </div>
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+                {% include 'inc/footer.html' %}
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    </div>
+   {% endblock content %}
+
+
+    {% block scripts %}
+        <script>
+            // Get all the checkboxes with class 'correct-answer'
+        const checkboxes = document.querySelectorAll('.correct_ans');
+
+        // Loop through each checkbox and add an event listener
+        checkboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', function() {
+            // If the checkbox is checked, uncheck all other checkboxes
+            if (this.checked) {
+              checkboxes.forEach(otherCheckbox => {
+                if (otherCheckbox !== this) {
+                  otherCheckbox.checked = false;
+                }
+              });
+            }
+          });
+        });
+        </script>
+    {% endblock scripts %}

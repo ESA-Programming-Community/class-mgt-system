@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html
+  lang="en"
+  class="light-style customizer-hide"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Login</title>
+
+    <meta name="description" content=""/>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon/favicon.ico' %}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/boxicons.css' %}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/core.css' %}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+
+    <!-- Page CSS -->
+    <!-- Page -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/pages/page-auth.css' %}" />
+    <!-- Helpers -->
+    <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config: Mandatory theme config file contains global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{% static 'assets/js/config.js' %}"></script>
+      <script src="https://kit.fontawesome.com/74a104b829.js" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <!-- Content -->
+
+    <div class="container-xxl">
+      <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner authentication-inner-admin">
+          <!-- Register -->
+          <div class="justify-content-center">
+              <h2 class="text-center">Admin Duties</h2>
+          </div>
+          <div class="row justify-content-center">
+            <div class="card col-lg-3 col-md-3 m-1">
+                <div class="card-body">
+                    <h4>Assign Instructor</h4>
+                    <p>Assign users as instructors for communities</p>
+                    <a href="{% url 'assign_instructor' %}">Assign</a>
+                </div>
+            </div>
+              <div class="card col-lg-3 col-md-3 m-1">
+                <div class="card-body">
+                    <h4>Instructors List</h4>
+                    <p>List of instructors and co-instructors</p>
+                    <a href="{% url 'assign_instructor' %}">Assign</a>
+                </div>
+            </div>
+              <div class="card col-lg-3 col-md-3 m-1">
+                <div class="card-body">
+                    <h4>Remove Instructor</h4>
+                    <p>Remove users as instructors for communities</p>
+                    <a href="{% url 'assign_instructor' %}">Go</a>
+                </div>
+            </div>
+              <div class="card col-lg-3 col-md-3 m-1">
+                <div class="card-body">
+                    <h4>Send Instructor Message</h4>
+                    <p>Send message to instructor</p>
+                    <a href="{% url 'assign_instructor' %}">Go</a>
+                </div>
+            </div>
+          </div>
+            <div class="justify-content-center mt-3">
+              <h4 class="text-center"><a href="{% url 'home' %}" class="text-center btn btn-primary">Community Overview</a></h4>
+              <h4 class="text-center"><a href="{% url 'logout' %}" class="text-center btn btn-danger">Logout</a></h4>
+          </div>
+          <!-- /Register -->
+        </div>
+      </div>
+    </div>
+
+    <!-- / Content -->
+
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+         <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Datatables -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
+    <script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+
+    <!-- Main JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+
+    <!-- Page JS -->
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <script>
+        {% for msg in messages %}
+            {% if msg.tags == "success" %}
+            Swal.fire({
+                text: '{{ msg }}',
+                icon: 'success',
+                timer: 1000
+            })
+            {% elif msg.tags == "warning" %}
+            Swal.fire({
+                text: '{{ msg }}',
+                icon: 'info',
+                timer: 1500
+            })
+
+                {% elif msg.tags == "info" %}
+            Swal.fire({
+                text: '{{ msg }}',
+                icon: 'info',
+            })
+            {% else %}
+            Swal.fire({
+                text: '{{ msg }}',
+                icon: 'error',
+                timer: 1000
+            })
+            {% endif %}
+        {% endfor %}
+      </script>
+  </body>
+</html>
