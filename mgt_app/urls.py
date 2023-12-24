@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from . import views
 from .auth import authviews
@@ -30,8 +32,20 @@ urlpatterns = [
     path('elevated/<str:community_name>/quiz/add_questions/<int:quiz_id>', quiz_views.add_question, name='add_question'),
     path('elevated/<str:community_name>/quiz/<str:quiz_title>/edit_question/<int:question_id>', quiz_views.edit_quiz_question, name='edit_question'),
     path('elevated/<str:community_name>/quiz/<str:quiz_title>/quiz_questions', quiz_views.display_quiz_question, name='quiz_questions'),
+
+
     path('elevated/<str:community_name>/assignments/add_assignments', assignments.add_assignment, name='add_assignment'),
     path('elevated/<str:community_name>/assignments/manage_assignments', assignments.manage_assignments, name='manage_assignment'),
+    path('elevated/<str:community_name>/assignments/edit_assignment/<str:assignment_title>', assignments.edit_assignment, name='edit_assignment'),
+    path('elevated/<str:community_name>/assignments/change_stat/<str:assignment_title>', assignments.change_stat, name='change_stat'),
+    path('elevated/<str:community_name>/assignments/delete_assignment/<str:assignment_title>', assignments.delete_assignment, name='delete_assignment'),
+    path('<str:community_name>/assignments', assignments.student_page_assignments, name='assignments'),
+    path('<str:community_name>/assignments/<str:assignment_title>/details', assignments.assignment_detail, name='assignment_detail'),
+    path('<str:community_name>/assignments/<str:assignment_title>/add_submission', assignments.submission_page, name='add_submission'),
+    path('<str:community_name>/assignments/submissions', assignments.student_submissions, name='submissions'),
+    path('<str:community_name>/assignments/<assignment_title>/submissions/<int:submission_id>', assignments.student_submission_detail, name='sub_detail'),
+    path('elevated/<str:community_name>/assignments/<str:assignment_title>/submissions', assignments.submissions_for_instructor, name='instructor_subs'),
+    path('elevated/<str:community_name>/assignments/<str:assignment_title>/submissions/<int:submission_id>', assignments.submission_detail_instructor, name='sub_detail_instructor'),
 
     path('<str:community_name>/quizzes/<str:quiz_title>/summary', quiz_views.quiz_score_page, name='quiz_summary'),
 
@@ -40,6 +54,9 @@ urlpatterns = [
     path('elevated/admin/all_instructors', instructor_views.instructors_list, name='all_instructors'),
     path('elevated/admin', views.admin_page_duties, name='admin_page'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 

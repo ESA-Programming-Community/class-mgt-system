@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title%}
+
+
+    {% block content %}
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        {% include 'inc/sideNav.html' %}
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          {% include 'inc/navbar.html' %}
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y pt-0">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style2 mt-3 mb-4">
+                    <li class="breadcrumb-item">
+                        <a href="#">ESA</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'home' %}">Communities</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">{{ community_name }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Assignment</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Submission</a>
+                    </li>
+                </ol>
+            </nav>
+              <div class="row">
+              <h4 class="mt-3">Assignment Submission - {{ assignment.assignment_title }}</h4>
+              <p style="font-style: italic">NB: Submissions can not be edited. Make sure of your submission. All the best!</p>
+                <div class="col-12 mb-4 order-0">
+                  <div class="card">
+                    <div class="d-flex align-items-end row">
+                      <div class="col-sm-10">
+                        <div class="card-body">
+                        <h5>Submission Form</h5>
+                            <form action="" method="post" enctype="multipart/form-data">
+                                {% if form.file_field.errors %}
+                                    <ul class="errorlist">
+                                        {% for error in form.file_field.errors %}
+                                            <li class="text-danger">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                {% csrf_token %}
+                                    <label id="file" for="">File Submission</label>
+                                    {{ form.file_field }}
+                                    <label id="url" for="">URL Link</label>
+                                    {{ form.url_field }}
+                                    <label id="plain" for="">Text Submission</label>
+                                    {{ form.plain_text_field }}
+                                <div class="mt-3">
+                                    <label for="">Note for Instructor</label>
+                                    {{ form.student_note }}
+                                </div>
+                                <button class="btn btn-outline-success mt-3">Submit</button>
+
+                            <style>
+        {% if assignment.preferred_submission_format != "File Submission" %}
+            #file { display: none; }
+        {% endif %}
+        {% if assignment.preferred_submission_format != "URL Submission" %}
+            #url { display: none; }
+        {% endif %}
+        {% if assignment.preferred_submission_format != "Text Submission" %}
+            #plain { display: none; }
+        {% endif %}
+    </style>
+                            </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+                {% include 'inc/footer.html' %}
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    </div>
+   {% endblock content %}
+
+
+    {% block scripts %}
+    {% endblock scripts %}

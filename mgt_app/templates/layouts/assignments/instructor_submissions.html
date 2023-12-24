@@ -36,39 +36,36 @@
                     <li class="breadcrumb-item">
                         <a href="#">Assignments</a>
                     </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Submissions</a>
+                    </li>
                 </ol>
             </nav>
               <div class="row">
-              <h4 class="mt-3">Manage Assignments</h4>
+              <h4 class="mt-3">Submissions for {{ assignment.assignment_title }} - {{ count }}</h4>
                 <div class="col-12 mb-4 order-0">
                   <div class="card p-4">
                       <div class="table-responsive text-nowrap">
                   <table class="table" id="dataTable">
                     <thead>
                       <tr>
-                        <th>#</th>
-                        <th>Title</th>
-                        <th>Status</th>
-                          <th>Date Posted</th>
+                        <th>Student</th>
+                        <th>Date Submitted</th>
+                        <th>Remarks</th>
+                          <th>Student Note</th>
                           <th>Deadline</th>
-                        <th>Edit</th>
-                          <th>Status</th>
-                        <th>Delete</th>
                           <th>Action</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                    {% for assignment in assignments %}
+                    {% for submission in submissions %}
                       <tr>
-                        <td><strong>{{ assignment.assignment_number }}</strong></td>
-                        <td>{{ assignment.assignment_title }}</td>
-                        <td>{{ assignment.status }}</td>
-                          <td>{{ assignment.date_posted }}</td>
-                          <td>{{ assignment.deadline }}</td>
-                        <td><a href="{% url 'edit_assignment' community_name=community_name assignment_title=assignment.assignment_title %}"><i class="fa fa-pencil"></i></a></td>
-                        <td><a href="{% url 'change_stat' community_name=community_name assignment_title=assignment.assignment_title %}"><i class="fa fa-refresh"></i></a></td>
-                        <td><a href="{% url 'delete_assignment' community_name=community_name assignment_title=assignment.assignment_title %}"><i class="fa fa-trash"></i></a></td>
-                        <td><a href="{% url 'instructor_subs' community_name=community_name assignment_title=assignment.assignment_title %}"><i class="fa fa-eye"></i> Submissions</a></td>
+                        <td><strong>{{ submission.user }}</strong></td>
+                        <td>{{ submission.submission_date }}</td>
+                        <td>{{ submission.remarks | truncatechars:10 }}</td>
+                          <td>{{ submission.student_note | truncatechars:15 }}</td>
+                          <td>{{ submission.deadline }}</td>
+                        <td><a href="{% url 'sub_detail_instructor' community_name=community_name assignment_title=assignment.assignment_title submission_id=submission.id %}"><i class="fa fa-eye"></i> Submission</a></td>
                       </tr>
                     {% endfor %}
                     </tbody>

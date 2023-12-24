@@ -100,6 +100,17 @@ class AddAssignmentForm(forms.Form):
         {'class': 'form-control', 'autocomplete': 'off'}
     ))
     deadline = forms.DateTimeField(required=False, widget=forms.DateTimeInput(attrs={'class': 'form-control', 'id': 'deadline'}, format='%Y-%m-%d %H:%M:%S'))
+    mode_of_submission = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), choices=(
+        ("In-Person", "In-Person"),
+        ("Online", "Online")
+    ))
+    preferred_submission_format = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), choices=(
+        ("File Submission", "File Submission"),
+        ("URL Submission", "URL Submission"),
+        ("Text Submission", "Text Submission")
+    ))
+
+
 
     def __init__(self, community, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -107,5 +118,40 @@ class AddAssignmentForm(forms.Form):
 
 
 
+class SubmissionForm(forms.Form):
+    ALLOWED_EXTENSIONS = ['pdf', 'py', 'java', 'sh', 'html', 'css', 'js', 'png', 'jpg', 'psd']
 
+    file_field = forms.FileField(widget=forms.FileInput(attrs={'class': 'form-control', 'id': 'file'}), required=False)
+    url_field = forms.URLField(widget=forms.URLInput(attrs={'class': 'form-control', 'id': 'url'}), required=False)
+    plain_text_field = forms.CharField(required=False, widget=forms.Textarea(
+        attrs={'class': 'form-control', 'placeholder': 'Paste your answer in this field', 'id': 'plain'}))
+    student_note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}), required=False)
+
+    def clean_file_field(self):
+        file_field = self.cleaned_data['file_field']
+        if file_field:
+            # Get file extension and check if it's in the allowed extensions list
+            file_extension = file_field.name.split('.')[-1].lower()
+            if file_extension not in self.ALLOWED_EXTENSIONS:
+                raise forms.ValidationError(
+                    "Invalid file type. Allowed file types are PDF, Python, Java, shell scripts, HTML, CSS, JS, PNG, JPG, PSD.")
+        return file_field
+
+    def clean(self):
+        cleaned_data = super().clean()
+        file_data = cleaned_data.get('file_field')
+        url_data = cleaned_data.get('url_field')
+        text_data = cleaned_data.get('plain_text_field')
+
+        # Check if at least one visible field is provided
+        if not any([file_data, url_data, text_data]):
+            visible_fields = [
+                'file_field' if 'file_field' in self.data else None,
+                'url_field' if 'url_field' in self.data else None,
+                'plain_text_field' if 'plain_text_field' in self.data else None
+            ]
+            if not any(visible_fields):
+                raise forms.ValidationError("At least one field is required.")
+
+        return cleaned_data
 

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -171,9 +172,46 @@ class Assignment(models.Model):
     community_it_belongs_to = models.ForeignKey(Community, on_delete=models.CASCADE)
     module_it_belongs_to = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True)
     deadline = models.DateTimeField(null=True, blank=True)
+    mode_choices = (
+        ("In person", "In person"),
+        ("Online", "Online")
+    )
+    mode_of_submission = models.CharField(max_length=300, null=False, blank=False, choices=mode_choices, db_default="Online")
+    format_choices = (
+        ("File Submission", "File Submission"),
+        ("URL Submission", "URL Submission"),
+        ("Text Submission", "Text Submission")
+    )
+    preferred_submission_format = models.CharField(max_length=200, null=False, db_default="URL Submission", blank=False)
 
     def __str__(self):
         return self.assignment_title
+
+
+class Submission(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    submission_date = models.DateTimeField(auto_now_add=True)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    file_submission = models.FileField(upload_to='submissions/', null=True, blank=True)
+    text_submission = models.TextField(null=True, blank=True)
+    url_submission = models.URLField(max_length=200, null=True, blank=True)
+    remarks = models.TextField(null=True, blank=True)
+    student_note = models.TextField(null=True, blank=True)
+
+    def clean(self):
+        super().clean()
+        if not any([self.file_submission, self.text_submission, self.url_submission]):
+            raise ValidationError('At least one submission type is required.')
+
+    def save_uploaded_file(self, uploaded_file):
+        # 'uploaded_file' is the file object obtained from the form
+
+        # Set the file_upload field with the uploaded file
+        self.file_submission.save(uploaded_file.name, uploaded_file, save=True)
+
+        # Save the model instance
+        self.save()
+
 
 
 

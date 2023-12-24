@@ -38,6 +38,7 @@ def quiz_detail(request, community_name, quiz_title):
     quiz = models.Quiz.objects.get(title=quiz_title, community_it_belongs_to=community)
     questions = models.Question.objects.filter(quiz_it_belongs_to=quiz).order_by('question_number')
     answers = models.Answer.objects.filter(question__in=questions)
+    modules = models.Module.objects.filter(community_it_belongs_to=community)
 
     if request.method == "POST":
         print("posted")
@@ -87,7 +88,8 @@ def quiz_detail(request, community_name, quiz_title):
         'questions': questions,
         'name': quiz.title,
         'community_name': community_name,
-        'answers': answers
+        'answers': answers,
+        'modules': modules,
     }
     return render(request, "layouts/quiz/quiz_details.html", context=context)
 
@@ -267,6 +269,7 @@ def edit_quiz_question(request, community_name, quiz_title, question_id):
     community = models.Community.objects.get(name=community_name)
     quiz = models.Quiz.objects.get(title=quiz_title)
     question = models.Question.objects.get(id=question_id)
+    modules = models.Module.objects.filter(community_it_belongs_to=community)
 
     # Get initial data for question form and answer formset
     initial_question_data = {

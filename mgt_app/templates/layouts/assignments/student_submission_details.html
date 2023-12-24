@@ -34,40 +34,40 @@
                         <a href="#">{{ community_name }}</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="#">Assignments</a>
+                        <a href="#">Assignment</a>
                     </li>
                 </ol>
             </nav>
               <div class="row">
-              <h4 class="mt-3">Assignments</h4>
-               {% for assignment in assignments %}
-                <div class="col-lg-4 mb-4 order-0">
+              <h4 class="mt-3">Submission Detail - {{ assignment.assignment_title }} Assignment</h4>
+                <div class="col-12 mb-4 order-0">
                   <div class="card">
                     <div class="d-flex align-items-end row">
                       <div class="col-sm-10">
                         <div class="card-body">
-                          <h6 class="card-title text-primary">#{{ assignment.assignment_number }}. {{ assignment.assignment_title }}</h6>
-                            <p class="mb-0">
-                            <span class="fw-bold">Description</span>: {{ assignment.assignment_instruction | truncatechars:30 }}
+                            <p class="mb-1">
+                            <span class="fw-bold">Date Submitted</span>: {{ submission.submission_date }}
                           </p>
-                            <p class="mb-0">
-                            <span class="fw-bold">Date Posted</span>: {{ assignment.date_posted }}
+
+                            <p class="mb-1">
+                            <span class="fw-bold">Remarks</span>: <pre>{{ submission.remarks }}</pre>
                           </p>
-                        <p class="mb-4">
-                            <span class="fw-bold">Deadline</span>: {{ assignment.deadline }}
-                          </p>
-                          <span class="badge bg-label-success me-1"></span>
-                            {% if assignment.status == False%}
-                            <a class="btn btn-dark" href="">Not Open</a>
+                            <p class="mb-1">
+                            <span class="fw-bold">Student Note</span>: <pre>{{ submission.student_note }}</pre>
+                            </p>
+
+                            {% if submission.file_submission %}
+                                Submitted File: <a class="btn btn-outline-primary" download="" href="{{ submission.file_submission }}"><i class="fa fa-download"></i> Download File</a>
+                            {% elif submission.url_submission %}
+                                Submitted URL: <input disabled type="text" value="{{ submission.url_submission }}">
                             {% else %}
-                                <a class="btn btn-success" href="{% url 'assignment_detail' community_name=community_name assignment_title=assignment.assignment_title %}"><i class="fa fa-eye mr-1"></i> Details</a>
+                                <span class="fw-bold">Submitted Text:</span> <pre>{{ submission.text_submission }}</pre>
                             {% endif %}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                  {% endfor %}
             </div>
             </div>
             <!-- / Content -->

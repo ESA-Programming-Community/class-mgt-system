@@ -244,19 +244,22 @@ samp {
   font-size: 1em;
   direction: ltr /* rtl:ignore */;
   unicode-bidi: bidi-override;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 pre {
   display: block;
   margin-top: 0;
   margin-bottom: 1rem;
-  overflow: auto;
   font-size: 85%;
 }
 pre code {
   font-size: inherit;
   color: inherit;
   word-break: normal;
+    white-space: pre-wrap; /* Preserve formatting but allow wrapping */
+  word-wrap: break-word;
 }
 
 code {

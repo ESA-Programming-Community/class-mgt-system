@@ -77,6 +77,8 @@ body {
   -webkit-tap-highlight-color: rgba(67, 89, 113, 0);
 }
 
+
+
 hr {
   margin: 1rem 0;
   color: #d9dee3;
@@ -240,8 +242,8 @@ pre,
 code,
 kbd,
 samp {
-  font-family: var(--bs-font-monospace);
-  font-size: 1em;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5em;
   direction: ltr /* rtl:ignore */;
   unicode-bidi: bidi-override;
 }
@@ -250,8 +252,9 @@ pre {
   display: block;
   margin-top: 0;
   margin-bottom: 1rem;
-  overflow: auto;
-  font-size: 85%;
+  font-size: 1em;
+  white-space: pre-wrap; /* Preserve formatting but allow wrapping */
+  overflow-y: auto;
 }
 pre code {
   font-size: inherit;
@@ -6540,6 +6543,7 @@ label.btn {
   border-color: #ffab00;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(255, 171, 0, 0.4);
 }
+
 .btn-warning:hover {
   color: #fff;
   background-color: #e69a00;

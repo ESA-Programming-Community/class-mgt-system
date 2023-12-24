@@ -90,13 +90,13 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Error">Mandatory Assignments</div>
+                  <a href="{% url 'assignments' community_name=community_name %}" class="menu-link">
+                    <div data-i18n="Error">All Assignments</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="pages-misc-under-maintenance.html" class="menu-link">
-                    <div data-i18n="Under Maintenance">Optional Assignments</div>
+                  <a href="{% url 'submissions' community_name=community_name %}" class="menu-link">
+                    <div data-i18n="Under Maintenance">Submissions</div>
                   </a>
                 </li>
               </ul>
@@ -269,12 +269,12 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{% url 'add_quiz' community_name=name %}" class="menu-link">
+                  <a href="{% url 'add_quiz' community_name=community_name %}" class="menu-link">
                     <div data-i18n="Basic Inputs">Add Quiz</div>
                   </a>
                 </li>
                   <li class="menu-item">
-                  <a href="{% url 'manage_quiz' community_name=name %}" class="menu-link">
+                  <a href="{% url 'manage_quiz' community_name=community_name %}" class="menu-link">
                     <div data-i18n="Input groups">Manage Quizzes</div>
                   </a>
                 </li>
@@ -315,7 +315,7 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{% url 'add_assignment' community_name=name %}" class="menu-link">
+                  <a href="{% url 'add_assignment' community_name=community_name %}" class="menu-link">
                     <div data-i18n="Vertical Form">Add Assignments</div>
                   </a>
                 </li>
@@ -361,7 +361,7 @@
                   </a>
                 </li>
                   <li class="menu-item">
-                  <a href="{% url 'manage_quiz' community_name=name %}" class="menu-link">
+                  <a href="{% url 'manage_quiz' community_name=community_name %}" class="menu-link">
                     <div data-i18n="Input groups">Remove Instructors</div>
                   </a>
                 </li>
