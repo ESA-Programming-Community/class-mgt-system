@@ -259,7 +259,7 @@ def submission_page(request, community_name, assignment_title):
 def student_submissions(request, community_name):
     community = models.Community.objects.get(name=community_name)
     user = models.CustomUser.objects.get(id=request.user.id)
-    assignment = models.Assignment.objects.get(community_it_belongs_to=community)
+    # assignment = models.Assignment.objects.get(community_it_belongs_to=community)
     assignments = models.Assignment.objects.filter(submission__user=user)
     modules = models.Module.objects.filter(community_it_belongs_to=community)
 
