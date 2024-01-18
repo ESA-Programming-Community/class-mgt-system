@@ -53,7 +53,7 @@ urlpatterns = [
     path('elevated/admin/assign_instructors', instructor_views.assign_instructor, name='assign_instructor'),
     path('elevated/admin/all_instructors', instructor_views.instructors_list, name='all_instructors'),
     path('elevated/admin', views.admin_page_duties, name='admin_page'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
