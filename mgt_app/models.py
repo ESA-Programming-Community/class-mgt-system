@@ -102,7 +102,7 @@ class Quiz(models.Model):
         ("Active", "Active"),
         ("Dead", "Dead")
     )
-    status = models.CharField(max_length=200, null=False, blank=False, choices=choices, db_default="Dead")
+    status = models.CharField(max_length=200, null=False, blank=False, choices=choices, default="Dead")
     date_posted = models.DateTimeField(auto_now_add=True)
 
 
@@ -133,7 +133,7 @@ class Question(models.Model):
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer_text = models.CharField(max_length=256, null=False, blank=False)
-    is_correct = models.BooleanField(db_default=False)
+    is_correct = models.BooleanField(default=False)
 
     def __str__(self):
         return self.answer_text
@@ -168,7 +168,7 @@ class Assignment(models.Model):
     assignment_title = models.CharField(max_length=250, null=False, blank=False)
     assignment_instruction = models.TextField(null=False, blank=False)
     date_posted = models.DateTimeField(auto_now_add=True)
-    status = models.BooleanField(db_default=False)
+    status = models.BooleanField(default=False)
     community_it_belongs_to = models.ForeignKey(Community, on_delete=models.CASCADE)
     module_it_belongs_to = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True)
     deadline = models.DateTimeField(null=True, blank=True)
@@ -176,13 +176,13 @@ class Assignment(models.Model):
         ("In person", "In person"),
         ("Online", "Online")
     )
-    mode_of_submission = models.CharField(max_length=300, null=False, blank=False, choices=mode_choices, db_default="Online")
+    mode_of_submission = models.CharField(max_length=300, null=False, blank=False, choices=mode_choices, default="Online")
     format_choices = (
         ("File Submission", "File Submission"),
         ("URL Submission", "URL Submission"),
         ("Text Submission", "Text Submission")
     )
-    preferred_submission_format = models.CharField(max_length=200, null=False, db_default="URL Submission", blank=False)
+    preferred_submission_format = models.CharField(max_length=200, null=False, default="URL Submission", blank=False)
 
     def __str__(self):
         return self.assignment_title

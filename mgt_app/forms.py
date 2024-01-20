@@ -110,12 +110,9 @@ class AddAssignmentForm(forms.Form):
         ("Text Submission", "Text Submission")
     ))
 
-
-
     def __init__(self, community, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['module_referenced'].queryset = models.Module.objects.filter(community_it_belongs_to=community)
-
 
 
 class SubmissionForm(forms.Form):
