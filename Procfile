@@ -1,1 +1,1 @@
-web: gunicorn class_mgt_system.wsgi
+web: gunicorn class_mgt_system.wsgi:application
