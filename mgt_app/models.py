@@ -48,18 +48,25 @@ class CustomUser(AbstractUser):
         return f"{self.first_name} {self.last_name} - {self.username}"
 
 
-
 class Community(models.Model):
     name = models.CharField(max_length=250, null=False, blank=False)
     description = models.TextField(max_length=500, null=True, blank=True)
-    instructor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True, related_name="main_instructor")
-    co_instructor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True, related_name="assistant_instructor")
+    requirements = models.TextField(max_length=500, null=True, blank=True)
+    instructor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True,
+                                   related_name="main_instructor")
+    co_instructor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True,
+                                      related_name="assistant_instructor")
     group_link = models.URLField(null=True, blank=True)
     members = models.ManyToManyField(CustomUser, null=True, blank=True)
 
     def __str__(self):
         return self.name
 
+
+class RequirementFulfillment(models.Model):
+    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, blank=True)
+    fulfilled = models.BooleanField(default=False)
 
 
 class Module(models.Model):
@@ -105,7 +112,6 @@ class Quiz(models.Model):
     status = models.CharField(max_length=200, null=False, blank=False, choices=choices, default="Dead")
     date_posted = models.DateTimeField(auto_now_add=True)
 
-
     def __str__(self):
         return self.title
 
@@ -137,7 +143,6 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.answer_text
-
 
 
 class StudentAnswer(models.Model):
@@ -176,7 +181,8 @@ class Assignment(models.Model):
         ("In person", "In person"),
         ("Online", "Online")
     )
-    mode_of_submission = models.CharField(max_length=300, null=False, blank=False, choices=mode_choices, default="Online")
+    mode_of_submission = models.CharField(max_length=300, null=False, blank=False, choices=mode_choices,
+                                          default="Online")
     format_choices = (
         ("File Submission", "File Submission"),
         ("URL Submission", "URL Submission"),
@@ -211,29 +217,3 @@ class Submission(models.Model):
 
         # Save the model instance
         self.save()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -58,18 +58,22 @@ def login_page(request):
             user = authenticate(request, username=name, password=password)
             print(user)
             if user:
-                login(request, user)
-                messages.success(request, 'Log in Successful')
-                if request.user.role == "Admin":
-                    return redirect('admin_page')
-                elif request.user.role == "Instructor" or request.user.role == "Co-Instructor":
-                    try:
-                        community = models.Community.objects.get(instructor=request.user)
-                    except models.Community.DoesNotExist:
-                        community = models.Community.objects.get(co_instructor=request.user)
-                    return redirect('dashboard', community_name=community.name)
+                if user.approved:
+                    login(request, user)
+                    messages.success(request, 'Log in Successful')
+                    if request.user.role == "Admin":
+                        return redirect('admin_page')
+                    elif request.user.role == "Instructor" or request.user.role == "Co-Instructor":
+                        try:
+                            community = models.Community.objects.get(instructor=request.user)
+                        except models.Community.DoesNotExist:
+                            community = models.Community.objects.get(co_instructor=request.user)
+                        return redirect('dashboard', community_name=community.name)
+                    else:
+                        return redirect('home')
                 else:
-                    return redirect('home')
+                    messages.warning(request, "Your account has not yet been approved")
+                    return redirect('login')
             else:
                 print("here")
                 messages.info(request, 'Invalid username or password')

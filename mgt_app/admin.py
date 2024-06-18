@@ -21,6 +21,7 @@ admin.site.register(models.Faculty)
 admin.site.register(models.Lesson)
 admin.site.register(models.Assignment)
 admin.site.register(models.Submission)
+admin.site.register(models.RequirementFulfillment)
 
 
 

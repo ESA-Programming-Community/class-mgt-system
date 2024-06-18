@@ -10,11 +10,16 @@ from mgt_app import models
 @login_required(login_url='login')
 # Create your views here.
 def home(request):
-    communities = models.Community.objects.all()
-    context = {
-        'comms': communities
-    }
-    return render(request, "layouts/community_overview.html", context=context)
+    user = models.CustomUser.objects.get(id=request.user.id)
+    if user.approved:
+        communities = models.Community.objects.all()
+        context = {
+            'comms': communities
+        }
+        return render(request, "layouts/community_overview.html", context=context)
+    else:
+        messages.success(request, 'You are not approved to access this page')
+        return redirect("home")
 
 
 @login_required(login_url='login')
@@ -29,6 +34,12 @@ def join_community(request, community_name):
         print("already in community")
         return redirect('dashboard', community_name=community_name)
     community.members.add(user)
+    new_requirement = models.RequirementFulfillment.objects.create(
+        student=user,
+        community=community,
+        fulfilled=False,
+    )
+    new_requirement.save()
     messages.success(request, f"You have joined the {community.name}")
     return redirect("dashboard", community_name=community_name)
 
@@ -39,6 +50,7 @@ def dashboard(request, community_name):
     print(community.co_instructor)
     community_members = community.members.all()
     modules = models.Module.objects.filter(community_it_belongs_to=community)
+    requirement_fulfilled = models.RequirementFulfillment.objects.filter(community=community, student=request.user).first().fulfilled
     context = {
         'name': community.name,
         'instructor': f"{community.instructor.first_name} {community.instructor.last_name}",
@@ -47,7 +59,9 @@ def dashboard(request, community_name):
         'link': community.group_link,
         'members': community_members,
         'modules': modules,
-        'community_name': community_name
+        'community_name': community_name,
+        'requirements': community.requirements if community.requirements else None,
+        'requirement_fulfilled': requirement_fulfilled
     }
     return render(request, "layouts/index.html", context=context)
 
@@ -137,7 +151,7 @@ def lesson_resources(request, community_name, module_name, lesson_title):
 
     return render(request, "layouts/lesson_resources.html", context=context)
 
-
+@login_required(login_url='login')
 def lesson_resource_player(request, community_name, pk):
     community = models.Community.objects.get(name=community_name)
     resource = models.Resource.objects.get(id=pk, lesson_it_belongs_to__module_it_belongs_to__community_it_belongs_to=community)
@@ -167,38 +181,39 @@ def delete_lesson(request, community_name, lesson_name):
         messages.warning(request, "Access Denied")
         return redirect(home)
 
-
+@login_required(login_url='login')
 def unapproved_students(request):
-    user = models.CustomUser.objects.get(id=request.user.id)
-    role = user.role
-    if role != "Instructor":
+    if request.user.is_superuser:
+        user = models.CustomUser.objects.get(id=request.user.id)
+        unapproved_students_list = models.CustomUser.objects.filter(approved=False, student_class=user.student_class)
+        context = {'students': unapproved_students_list}
+        return render(request, "layouts/pending_approvals.html", context=context)
+    else:
+        messages.success(request, "Access Denied..")
+        return redirect("home")
+
+@login_required(login_url='login')
+def approve_student(request, pk):
+    if request.user.is_superuser:
+        user = models.CustomUser.objects.get(id=request.user.id)
+        student_class = user.student_class
+        student_to_be_approved = models.CustomUser.objects.get(id=pk, student_class=student_class)
+        name = student_to_be_approved.first_name + " " + student_to_be_approved.last_name
+        phone = student_to_be_approved.phone_number
+        print(phone)
+        student_to_be_approved.approved = True
+        student_to_be_approved.save()
+        messages.success(request, f"{name} has been approved.")
+        message = f"Hello {name}, Your account for the Classroom has been approved. You can log in now to join your classroom."
+        url = f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=cWhNWkhHcEV0SEZNTFpvT3B0V2o&to=233{phone}&from=Classroom&sms={message}"
+        response = requests.get(url=url)
+        print(response.json())
+        return redirect('pending_approvals')
+    else:
         messages.warning(request, "Access Denied..")
         return redirect("home")
-    unapproved_students_list = models.CustomUser.objects.filter(approved=False, student_class=user.student_class)
-    context = {'students': unapproved_students_list}
-    return render(request, "layouts/pending_approvals.html", context=context)
 
-
-def approve_student(request, pk):
-    user = models.CustomUser.objects.get(id=request.user.id)
-    student_class = user.student_class
-    if user.role != "Class Representative":
-        messages.warning(request, "Access Denied. Low Clearance Level.")
-        return redirect("home")
-    student_to_be_approved = models.CustomUser.objects.get(id=pk, student_class=student_class)
-    name = student_to_be_approved.first_name + " " + student_to_be_approved.last_name
-    phone = student_to_be_approved.phone_number
-    print(phone)
-    student_to_be_approved.approved = True
-    student_to_be_approved.save()
-    messages.success(request, f"{name} has been approved.")
-    message = f"Hello {name}, Your account for the Classroom has been approved. You can log in now to join your classroom."
-    url = f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=cWhNWkhHcEV0SEZNTFpvT3B0V2o&to=233{phone}&from=Classroom&sms={message}"
-    response = requests.get(url=url)
-    print(response.json())
-    return redirect('pending_approvals')
-
-
+@login_required(login_url='login')
 def admin_page_duties(request):
     return render(request, "admin_page.html")
 
